@@ -9,11 +9,9 @@ import com.itheima.reggie.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -75,10 +73,10 @@ public class EmployeeController {
         log.info("新增员工信息,员工信息:{}", employee.toString());
 
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setCreateUser((long) request.getSession().getAttribute("employee"));
-        employee.setUpdateUser(employee.getCreateUser());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateUser((long) request.getSession().getAttribute("employee"));
+//        employee.setUpdateUser(employee.getCreateUser());
         employeeService.save(employee);
 
         return R.success("新增员工成功");
@@ -109,9 +107,11 @@ public class EmployeeController {
     @PutMapping
     public R<String> update(HttpServletRequest request, @RequestBody Employee employee){
         log.info(employee.toString());
-        employee.setUpdateTime(LocalDateTime.now());
-        Long empId = (Long) request.getSession().getAttribute("employee");
-        employee.setUpdateUser(empId);
+//        employee.setUpdateTime(LocalDateTime.now());
+//        Long empId = (Long) request.getSession().getAttribute("employee");
+//        employee.setUpdateUser(empId);
+        long id = Thread.currentThread().getId();
+        log.info("当前线程id:{}", id);
         employeeService.updateById(employee);
         return R.success("更新员工信息成功");
     }
