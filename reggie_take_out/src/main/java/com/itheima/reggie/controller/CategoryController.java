@@ -16,6 +16,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -63,8 +64,8 @@ public class CategoryController {
 
     /**
      * 根据id修改分类信息
-     * @param category
-     * @return
+     * @param category 分类名称
+     * @return 分类实体
      */
     @PutMapping
     public R<String> update(@RequestBody Category category){
@@ -73,6 +74,16 @@ public class CategoryController {
         categoryService.updateById(category);
 
         return R.success("修改分类信息成功");
+    }
+
+
+    @GetMapping("/list")
+    public R<List<Category>> getCategoryList(Category category){
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(category.getType() != null, Category::getType, category.getType());
+        queryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
+        List<Category> categoryList = categoryService.list(queryWrapper);
+        return R.success(categoryList);
     }
 
 }
